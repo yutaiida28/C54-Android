@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import java.io.BufferedReader
+import java.io.FileNotFoundException
 import java.io.InputStreamReader
 
 class AfficherActivity : AppCompatActivity() {
@@ -28,19 +29,39 @@ class AfficherActivity : AppCompatActivity() {
 
     }
 
-    private fun lireMemos(): ArrayList<String> {
-        val fis = openFileInput("memo.txt")
-        val isr = InputStreamReader(fis)
-        val br = BufferedReader(isr)
+    private fun lireMemos(): ArrayList<String>
+    {
+        var arrayliste = ArrayList<String>()
+        try {
+            val fis = openFileInput("memo.txt")
+            val isr = InputStreamReader(fis)
+            val br = BufferedReader(isr)
 
-        val arrayliste = ArrayList<String>()
-        var line = br.readLine()
+            // fermer le br lorsque terminé 3 exception
+            br.use {
+                var line = br.readLine()
 
-        while (line != null) {
-            arrayliste.add(line)  // Add the actual line content
-            line = br.readLine()
+                while (line != null) {
+                    arrayliste.add(line)  // Add the actual line content
+                    line = br.readLine()
+                }
+            }
+            //autre facon
+            br.use {
+                br.forEachLine { ligne -> arrayliste }
+                //alternative
+                br.forEachLine { arrayliste.add(it) } // it : cette ligne-la
+            }
+            // 3e facon
+            br.use {
+                arrayliste = br.readLine() as ArrayList<String> // transtypage
+            }
         }
-        br.close()
+        catch ( fnfe : FileNotFoundException)
+        {
+            fnfe.printStackTrace()
+        }
         return arrayliste
+
     }
 }
