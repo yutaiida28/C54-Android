@@ -79,8 +79,18 @@ class MainActivity : AppCompatActivity() {
         }
         return conteur
     }
-
-//    private fun ajouteNom():{
-//        val fos = openFileOutput("text")
-//    }
+    fun compterMots () : Int
+    {
+        val compteur =0
+        val fis = openFileInput ("fihier.txt")
+        fis. use {
+            val sc = Scanner(fis)
+            // je n'appele pas useDElimiter car je veux que le délémiteur soit
+            while (sc.hasNext())
+            {
+                compteur++
+                sc.next()
+            }
+        }
+    }
 }
