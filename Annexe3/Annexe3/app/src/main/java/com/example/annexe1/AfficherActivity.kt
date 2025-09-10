@@ -3,6 +3,7 @@ package com.example.annexe1
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.ListView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -25,43 +26,28 @@ class AfficherActivity : AppCompatActivity() {
         liste = findViewById(R.id.liste)
 //        liste.setAdapter(ArrayAdapter(this, android.R.layout.simple_list_item_1, lireMemos()))
 
-        liste.adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, lireMemos())
+        liste.adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, lireMemos()!!)
 
     }
 
-    private fun lireMemos(): ArrayList<String>
+    private fun lireMemos(): ArrayList<String>?
     {
-        var arrayliste = ArrayList<String>()
+        //si on veux initialiser a nulll ou none on mets point ? pis il faut le trimbler
+        var v: ArrayList<Memo>? = null
+        var triee : ArrayList<String>? = null
         try {
-            val fis = openFileInput("memo.txt")
-            val isr = InputStreamReader(fis)
-            val br = BufferedReader(isr)
-
-            // fermer le br lorsque terminé 3 exception
-            br.use {
-                var line = br.readLine()
-
-                while (line != null) {
-                    arrayliste.add(line)  // Add the actual line content
-                    line = br.readLine()
-                }
-            }
-            //autre facon
-            br.use {
-                br.forEachLine { ligne -> arrayliste }
-                //alternative
-                br.forEachLine { arrayliste.add(it) } // it : cette ligne-la
-            }
-            // 3e facon
-            br.use {
-                arrayliste = br.readLine() as ArrayList<String> // transtypage
-            }
+            v = SinglrtonMemos.deSerialiserListe(this@AfficherActivity) // liste de memos qui vient du singleton
+            v.sortWith(compareBy{it.echance}) // fonction a haut niveau car elle prend pas de parametre on peux donc coder directement dans les accolade (trie en fonction de l'écheance
+            triee = ArrayList<String>() // liste de string vide
+            for (memo in v) // pour chaque memos de la liste
+                triee.add( memo.message +" "+ memo.echance) //ajoute les message du memo
         }
-        catch ( fnfe : FileNotFoundException)
+        catch (f:FileNotFoundException)
         {
-            fnfe.printStackTrace()
+            Toast.makeText(this@AfficherActivity, "pas de fichier de serialisation", Toast.LENGTH_LONG).show()
+            finish()
         }
-        return arrayliste
 
+        return triee
     }
 }

@@ -25,19 +25,19 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:text="Button" />
+        android:text="ajouter" />
 
     <Button
         android:id="@+id/boutonAficher"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:text="Button" />
+        android:text="memo" />
 
     <Button
         android:id="@+id/boutonQuitter"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:text="Button" />
+        android:text="quiter" />
 </LinearLayout>
