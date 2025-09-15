@@ -35,9 +35,17 @@
         android:text="memo" />
 
     <Button
+        android:id="@+id/boutonVolum"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text="volum" />
+
+    <Button
         android:id="@+id/boutonQuitter"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:text="quiter" />
+
 </LinearLayout>

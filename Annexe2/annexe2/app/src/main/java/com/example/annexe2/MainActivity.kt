@@ -23,6 +23,7 @@ import java.io.InputStream
 class MainActivity : AppCompatActivity() {
 
     lateinit var bouton: Button;
+    lateinit var volume: Button;
     lateinit var texteDuree: TextView
     lateinit var texteNom: TextView;
 
@@ -40,11 +41,13 @@ class MainActivity : AppCompatActivity() {
         }
 
         bouton = findViewById(R.id.bouton);
+        volume = findViewById(R.id.volume);
         texteDuree = findViewById(R.id.texteDuree);
         texteNom = findViewById(R.id.texteNom);
 
         val ec = Ecouteur()
         bouton.setOnClickListener(ec)
+        volume.setOnClickListener(ec)
 
 
         // création du lanceur de boomerang, objet sera appelé au retour du boomerang dans cette classe
@@ -88,7 +91,12 @@ class MainActivity : AppCompatActivity() {
 
     inner class Ecouteur : View.OnClickListener {
         override fun onClick(v: View?) {
-            rechercherFichiers()
+            if (v == bouton) {
+                rechercherFichiers()
+            }
+            else if (v == volume){
+                startActivity(Intent(this@MainActivity, SecondActivity::class.java))
+            }
         }
 
     }

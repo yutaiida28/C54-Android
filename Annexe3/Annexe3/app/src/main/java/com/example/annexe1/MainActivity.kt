@@ -16,6 +16,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var boutonAjouter:Button
     lateinit var boutonAficher:Button
     lateinit var boutonQuitter:Button
+    lateinit var boutonVolume:Button
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,6 +31,7 @@ class MainActivity : AppCompatActivity() {
         boutonAjouter = findViewById(R.id.boutonAjouter)
         boutonAficher = findViewById(R.id.boutonAficher)
         boutonQuitter = findViewById(R.id.boutonQuitter)
+        boutonVolume = findViewById(R.id.boutonVolum)
 
 
         //1ere
@@ -37,6 +39,7 @@ class MainActivity : AppCompatActivity() {
         // 2e etape
         boutonAjouter.setOnClickListener(ec)
         boutonAficher.setOnClickListener(ec)
+        boutonVolume.setOnClickListener(ec)
         boutonQuitter.setOnClickListener(ec)
     }
 
@@ -51,6 +54,10 @@ class MainActivity : AppCompatActivity() {
                 }
                 boutonAficher -> {
                     val i = Intent(this@MainActivity, AfficherActivity::class.java)
+                    startActivity(i)
+                }
+                boutonVolume -> {
+                    val i = Intent(this@MainActivity, VolumActivity::class.java)
                     startActivity(i)
                 }
             }
