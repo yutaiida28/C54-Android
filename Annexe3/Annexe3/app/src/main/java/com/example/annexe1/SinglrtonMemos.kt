@@ -22,7 +22,7 @@ object SinglrtonMemos {
 
     fun serialiserListe( contexte: Context)
     {
-        val fos = contexte.openFileOutput ( "serialiastion.ser", Context.MODE_PRIVATE)  // parceque on nest pas dans une activité on vas le metre sur contexte
+        val fos = contexte.openFileOutput ( "serialisation.ser", Context.MODE_PRIVATE)  // parceque on nest pas dans une activité on vas le metre sur contexte
         val oos = ObjectOutputStream(fos) // tempon special pour objets
         oos.use{oos.writeObject(liste)}
     }
