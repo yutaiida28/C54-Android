@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity" >
+
+    <LinearLayout
+        android:id="@+id/dent1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.5"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/numD1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.2"
+            android:ems="10"
+            android:hint="numéro de la dent"
+            android:inputType="text"
+            android:textSize="14sp" />
+
+        <CheckBox
+            android:id="@+id/d1CanalCheck"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.2"
+            android:text="Est-ce un traitement de canal ?" />
+
+        <EditText
+            android:id="@+id/d1Note"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.5"
+            android:ems="10"
+            android:hint="notes"
+            android:inputType="text|textMultiLine"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.05"
+        android:background="?android:attr/listDivider" />
+
+    <LinearLayout
+        android:id="@+id/dent2"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.5"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/numD2"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.2"
+            android:ems="10"
+            android:hint="numéro de la dent"
+            android:inputType="text"
+            android:textSize="14sp" />
+
+        <CheckBox
+            android:id="@+id/d2CanalCheck"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.2"
+            android:text="Est-ce un traitement de canal ?" />
+
+        <EditText
+            android:id="@+id/d2Note"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.5"
+            android:ems="10"
+            android:hint="notes"
+            android:inputType="text|textMultiLine"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+</LinearLayout>
