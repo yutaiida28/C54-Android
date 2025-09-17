@@ -39,11 +39,11 @@ class MainActivity : AppCompatActivity() {
                 var dentUn: Dent = ois.readObject() as Dent
                 var dentDeux: Dent = ois.readObject() as Dent
 
-                (dent1.getChildAt(0) as EditText).setText(dentUn.numD1.toString())
+                (dent1.getChildAt(0) as EditText).setText(dentUn.numDent.toString())
                 (dent1.getChildAt(1) as CheckBox).setChecked(dentUn.traitementCanal)
                 (dent1.getChildAt(2) as EditText).setText(dentUn.notes)
 
-                (dent2.getChildAt(0) as EditText).setText(dentDeux.numero.toString())
+                (dent2.getChildAt(0) as EditText).setText(dentDeux.numDent.toString())
                 (dent2.getChildAt(1) as CheckBox).setChecked(dentDeux.traitementCanal)
                 (dent2.getChildAt(2) as EditText).setText(dentDeux.notes)
             }
