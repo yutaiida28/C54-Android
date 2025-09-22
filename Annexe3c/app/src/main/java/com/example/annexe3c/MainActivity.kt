@@ -56,15 +56,15 @@ class MainActivity : AppCompatActivity() {
     override fun onStop() {
         super.onStop()
 
-        val noDent1 = (dent1.get(0) as EditText).text.toString().toInt()
-        val trai1 = (dent1.get(1) as CheckBox).isChecked
-        val notes1 = (dent1.get(2) as EditText).text.toString()
+        val noDent1 = (dent1.getChildAt(0) as EditText).text.toString().toInt()
+        val trai1 = (dent1.getChildAt(1) as CheckBox).isChecked
+        val notes1 = (dent1.getChildAt(2) as EditText).text.toString()
 
         var dentUn = Dent(noDent1, trai1, notes1)
 
-        val noDent2 = (dent2.get(0) as EditText).text.toString().toInt()
-        val trai2 = (dent2.get(1) as CheckBox).isChecked
-        val notes2 = (dent2.get(2) as EditText).text.toString()
+        val noDent2 = (dent2.getChildAt(0) as EditText).text.toString().toInt()
+        val trai2 = (dent2.getChildAt(1) as CheckBox).isChecked
+        val notes2 = (dent2.getChildAt(2) as EditText).text.toString()
 
         var dentDeux = Dent(noDent2, trai2, notes2)
 
