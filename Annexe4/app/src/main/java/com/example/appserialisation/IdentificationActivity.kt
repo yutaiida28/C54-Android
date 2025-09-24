@@ -1,4 +1,4 @@
-package com.example.annexe4v2
+package com.example.appserialisation
 
 import android.app.Activity
 import android.content.Intent
@@ -30,6 +30,7 @@ class IdentificationActivity : AppCompatActivity() {
         confirmer = findViewById(R.id.button2)  // Assure-toi que l'ID correspond
         nom = findViewById(R.id.nom)
         prenom = findViewById(R.id.prenom)
+
         confirmer.setOnClickListener {
             // Créer l'objet Utilisateur
             val utilisateur = Utilisateur(
@@ -39,7 +40,7 @@ class IdentificationActivity : AppCompatActivity() {
 
             // Créer l'intent de retour
             val intentRetour = Intent()  // Pas de destination !
-            intentRetour.putExtra("identifiant", utilisateur)
+            intentRetour.putExtra("utilisateur", utilisateur)
 
             // Définir le résultat et terminer
             setResult(Activity.RESULT_OK, intentRetour)

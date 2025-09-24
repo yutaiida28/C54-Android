@@ -1,4 +1,4 @@
-package com.example.annexe4v2
+package com.example.appserialisation
 
 import java.io.Serializable
 
