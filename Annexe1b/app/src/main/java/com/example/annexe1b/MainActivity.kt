@@ -10,6 +10,7 @@ import java.io.BufferedReader
 import java.io.FileInputStream
 import java.io.FileNotFoundException
 import java.io.InputStreamReader
+import java.util.Scanner
 
 
 // Chere Yuta. Si je meurs je te legue tout. Ce document est utilisable legalement.
@@ -59,6 +60,8 @@ class MainActivity : AppCompatActivity() {
                 br.use {
                     for (ligne in br.readLines()) //pas recomender pour des huge file 2g +
                         conteur += ligne.length
+
+                    //conteur = br.readLines().sumOf { ligne -> ligne.length} //plus que on met un lambda dans les braquette on ne met pas les parenthese
                 }
             }
             else if (input == "c")
@@ -69,7 +72,7 @@ class MainActivity : AppCompatActivity() {
                             if (i == 'c' || i == 'C')
                                 conteur += 1
 
-                    //conteur = br.readLines().sumOf { ligne -> ligne.length} //plus que on met un lambda dans les braquette on ne met pas les parenthese
+
                 }
             }
         }
@@ -79,18 +82,15 @@ class MainActivity : AppCompatActivity() {
         }
         return conteur
     }
-    fun compterMots () : Int
-    {
-        val compteur =0
-        val fis = openFileInput ("fihier.txt")
-        fis. use {
-            val sc = Scanner(fis)
-            // je n'appele pas useDElimiter car je veux que le délémiteur soit
-            while (sc.hasNext())
-            {
-                compteur++
-                sc.next()
+    fun compterMots(): Int {
+        return Scanner(openFileInput("text.txt")).use { scanner ->
+            scanner.useDelimiter(",") //si on ne veux pas delimiter retirer la ligne  
+            var nombreMots = 0
+            while (scanner.hasNext()) {
+                scanner.next()
+                nombreMots++
             }
+            nombreMots
         }
     }
 }

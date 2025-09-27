@@ -11,6 +11,7 @@ import java.io.FileInputStream
 import java.io.FileNotFoundException
 import java.io.InputStreamReader
 import java.util.Scanner
+import java.util.Vector
 
 
 // Chere Yuta. Si je meurs je te legue tout. Ce document est utilisable legalement.
@@ -35,15 +36,41 @@ class MainActivity : AppCompatActivity() {
         NbCaract.setText(lireText("caracteres").toString())
         NbDeC.setText(lireText("c").toString())
     }
-    private fun readPlanets():Int{
-        val planetsVector = mutableListOf<Planet>()
-        try {
+    fun lirePlanetes(): Int {
+        val vector = Vector<Planet>()
 
+        openFileInput("planetes.txt").bufferedReader().use { reader ->
+            reader.forEachLine { ligne ->
+                if (ligne.trim().isNotEmpty()) {
+                    val parties = ligne.trim().split("\\s+".toRegex())
+                    if (parties.size >= 2) {
+                        val nom = parties[0]
+                        val satellites = parties[1].toInt()
+                        vector.add(Planet(nom, satellites))
+                    }
+                }
+            }
         }
-        catch ( fnfe : FileNotFoundException)
-        {
-            fnfe.printStackTrace()
+
+        return vector.size
+    }
+    fun lirePlanetes2(): Int {
+        val vector = Vector<Planet>()
+
+        Scanner(openFileInput("planetes.txt")).use { scanner ->
+            while (scanner.hasNextLine()) {
+                val ligne = scanner.nextLine().trim()
+                if (ligne.isNotEmpty()) {
+                    val scannerLigne = Scanner(ligne)
+                    val nom = scannerLigne.next()
+                    val satellites = scannerLigne.nextInt()
+                    vector.add(Planet(nom, satellites))
+                    scannerLigne.close()
+                }
+            }
         }
+
+        return vector.size
     }
     private fun lireText(input: String): Int
     {
