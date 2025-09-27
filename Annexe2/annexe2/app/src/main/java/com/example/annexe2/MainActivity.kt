@@ -94,9 +94,9 @@ class MainActivity : AppCompatActivity() {
             if (v == bouton) {
                 rechercherFichiers()
             }
-            else if (v == volume){
-                startActivity(Intent(this@MainActivity, SecondActivity::class.java))
-            }
+//            else if (v == volume){
+//                startActivity(Intent(this@MainActivity, SecondActivity::class.java))
+//            }
         }
 
     }
