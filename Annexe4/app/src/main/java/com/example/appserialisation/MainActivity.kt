@@ -51,6 +51,8 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, IdentificationActivity::class.java)
             launcher.launch(intent)
         }
+
+
     //save instant state inactive car dans le manifeste on annule le reciclage du cicle de vie
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
 //            utilisateur = savedInstanceState?.getSerializable("utilisateur", Utilisateur::class.java)
@@ -77,7 +79,7 @@ class MainActivity : AppCompatActivity() {
         }
         return utilisateur
     }
-    override fun onSaveInstanceState(outState: Bundle) {
+    override fun onSaveInstanceState(outState: Bundle) { // bon pour sauve les information temporairement ex on tourne letele phone sur le side cependent il est impoortent de ce souvenir que on pert le tout lorsque lapp est termine  voir ligne 55 +
         super.onSaveInstanceState(outState)
         outState.putSerializable("utilisateur",utilisateur)
     }
