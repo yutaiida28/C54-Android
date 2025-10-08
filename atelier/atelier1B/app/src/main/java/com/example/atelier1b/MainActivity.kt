@@ -36,11 +36,31 @@ class MainActivity : AppCompatActivity() {
             { responce ->
                 val li:ListeProduits = Klaxon().parse<ListeProduits>(responce) ?: ListeProduits()
                 Toast.makeText(this, "response is ${li.articles.size}",LENGTH_LONG).show()
+                afficher(li)
             },
             { Toast.makeText(this, "fuck you", LENGTH_LONG).show() }
         )
 
         queue.add(stringRequest)
     }
+    fun afficher(li: ListeProduits){
+        val remplir = ArrayList<HashMap<String, String>>()
 
+        for (article in li.articles) {
+            val temp = HashMap<String, String>()
+            temp["nom"] = article.nom
+            temp["prix"] = article.prix
+            remplir.add(temp)
+        }
+
+        val adap = SimpleAdapter(
+            this,
+            remplir,
+            R.layout.layout,
+            arrayOf("nom", "prix"),
+            intArrayOf(R.id.nom, R.id.prix)
+        )
+
+        listeAccessoires.setAdapter(adap);
+    }
 }
