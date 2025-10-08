@@ -1,0 +1,15 @@
+music 
+image	|   titre	|	lenght music  | totalTrackCount|star
+	|nom artiste	|
+------------------------------------------------------------------
+- peutetre en ordre de plus ecouter |tout afficher (change activité)|
+music
+music
+music
+- 
+suggestion par moyenne sur le genre le plus écouter 
+aimerier peutetre...
+music le moin jouer
+-
+ma playliste 
+-

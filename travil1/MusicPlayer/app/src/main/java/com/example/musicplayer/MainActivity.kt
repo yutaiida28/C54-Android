@@ -1,12 +1,20 @@
 package com.example.musicplayer
 
 import android.os.Bundle
+import android.widget.Toast
+import android.widget.Toast.LENGTH_LONG
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.android.volley.Request
+import com.android.volley.toolbox.StringRequest
+import com.android.volley.toolbox.Volley
+import com.beust.klaxon.Klaxon
 
 class MainActivity : AppCompatActivity() {
+    val url = "https://api.jsonbin.io/v3/b/680a6a1d8561e97a5006b822?meta=false"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -16,5 +24,18 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        val queue = Volley.newRequestQueue(this)
+
+        val stringRequest = StringRequest(
+            Request.Method.GET,url,
+            { responce ->
+                val lm:ListeMusics = Klaxon().parse<ListeMusics>(responce) ?: ListeMusics()
+                Toast.makeText(this, "response is ${lm.listeMusic.size}", LENGTH_LONG).show()
+
+            },
+            { Toast.makeText(this, "fuck you", LENGTH_LONG).show() }
+        )
+        queue.add(stringRequest)
     }
 }
