@@ -1,5 +1,7 @@
 package com.example.musicplayer
 
+import java.io.Serializable
+
 data class Music(
     val id: String,
     val title: String,
@@ -13,4 +15,4 @@ data class Music(
     val duration: Int,
     val site: String
 
-)
+) : Serializable { }

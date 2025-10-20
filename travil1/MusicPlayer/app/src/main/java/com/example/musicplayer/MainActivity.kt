@@ -1,9 +1,14 @@
 package com.example.musicplayer
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import android.widget.Toast.LENGTH_LONG
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultCallback
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -14,6 +19,8 @@ import com.beust.klaxon.Klaxon
 
 class MainActivity : AppCompatActivity() {
     val url = "https://api.jsonbin.io/v3/b/680a6a1d8561e97a5006b822?meta=false"
+    lateinit var launcher: ActivityResultLauncher<Intent>;
+    var music: Music? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,6 +31,13 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        launcher = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult(),
+            CallBackUtilisateur()
+        )
+        val intent = Intent(this, GetMusic::class.java)
+
+        launcher.launch(intent )
 
         val queue = Volley.newRequestQueue(this)
 
@@ -38,4 +52,6 @@ class MainActivity : AppCompatActivity() {
         )
         queue.add(stringRequest)
     }
+
+
 }
