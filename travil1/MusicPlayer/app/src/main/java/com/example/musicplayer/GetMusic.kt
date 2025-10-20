@@ -6,36 +6,61 @@ import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.beust.klaxon.Klaxon
+/*
 
-class GetMusid{
-    private val url = "https://api.jsonbin.io/v3/b/680a6a1d8561e97a5006b822?meta=false"
-    private var obs: ObservateurChangement? = null
-
-    init{
-
-    }
-}
 
 class GetMusic(context: Context) {
     val url = "https://api.jsonbin.io/v3/b/680a6a1d8561e97a5006b822?meta=false"
-    var music: Music? = null
+    private val context = context
+    var lm: ListeMusics? = null
 
-    val intentRetour = Intent()
-    val queue = Volley.newRequestQueue()
-    val stringRequest = StringRequest(
-        Request.Method.GET,url,
-        { responce ->
-            val lm:ListeMusics = Klaxon().parse<ListeMusics>(responce) ?: ListeMusics()
-            intentRetour.putExtra("lm", ListeMusics)
-        },
+    private var mObs: musicUpdateObserver? = null
 
-    )
 
-    queue.add(stringRequest)
 
-    // Pas de destination !
-    intentRetour.putExtra("utilisateur", utilisateur)
+    fun setObserver(observer: musicUpdateObserver){
+        this.mObs = observer
+    }
 
-    setResult(Activity.RESULT_OK, intentRetour)
-    finish()
+    fun getMusics(context : Context){
+        val queue = Volley.newRequestQueue(context)
+        val stringRequest = StringRequest(
+            Request.Method.GET,url,
+            { responce ->
+                this.lm = Klaxon().parse<ListeMusics>(responce) ?: ListeMusics()
+                mObs!!.succes(lm)
+            },
+            { error ->
+                mObs!!.error()
+            }
+
+        )
+
+        queue.add(stringRequest)
+    }
+
+*/
+class GetMusic(context: Context, url: String) {
+    private val url = url
+    private val context = context  // Garder le context
+    private var mObs: musicUpdateObserver? = null
+
+    fun setObserver(observer: musicUpdateObserver) {
+        mObs = observer
+    }
+
+    fun fetchMusic() {  // Nom plus clair
+        val queue = Volley.newRequestQueue(context)
+        val stringRequest = StringRequest(
+            Request.Method.GET, url,
+            { response ->
+                val lm = Klaxon().parse<ListeMusics>(response) ?: ListeMusics()
+                mObs?.succes(lm)  // Safe call
+            },
+            { error ->
+                mObs?.error()  // Safe call
+            }
+        )
+        queue.add(stringRequest)
+    }
 }
