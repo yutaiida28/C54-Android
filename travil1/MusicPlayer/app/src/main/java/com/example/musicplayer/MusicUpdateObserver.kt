@@ -1,7 +1,6 @@
 package com.example.musicplayer
 
-interface musicUpdateObserver {
+interface MusicUpdateObserver {
     fun succes(lm : ListeMusics)
     fun error()
-
 }

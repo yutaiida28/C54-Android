@@ -1,6 +1,5 @@
 package com.example.musicplayer
 
-import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import android.widget.Toast.LENGTH_LONG
@@ -8,14 +7,11 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.android.volley.Request
-import com.android.volley.toolbox.StringRequest
-import com.android.volley.toolbox.Volley
-import com.beust.klaxon.Klaxon
 
-class MainActivity : AppCompatActivity(), musicUpdateObserver {
+class MainActivity : AppCompatActivity(), MusicUpdateObserver {
     val url = "https://api.jsonbin.io/v3/b/680a6a1d8561e97a5006b822?meta=false"
-    var leModele: Sujet? = null
+    var musicUpdate: Sujet? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -25,7 +21,7 @@ class MainActivity : AppCompatActivity(), musicUpdateObserver {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
+    /*
         val queue = Volley.newRequestQueue(this)
 
         val stringRequest = StringRequest(
@@ -37,12 +33,27 @@ class MainActivity : AppCompatActivity(), musicUpdateObserver {
             { Toast.makeText(this, "fuck you", LENGTH_LONG).show() }
         )
         queue.add(stringRequest)
+    */
     }
 
     override fun onStart() {
         super.onStart()
         musicUpdate = GetMusic(this ,url)
-        (musicUpdate as GetMusic).
+        (musicUpdate as GetMusic).addObserver(this)
+    }
+
+    override fun succes(lm: ListeMusics) {
+        Toast.makeText(this, "response is ${lm.listeMusic.size}", LENGTH_LONG).show()
+        afficher(lm)
+    }
+
+    fun afficher(lm: ListeMusics){
+
+    }
+
+
+    override fun error() {
+        TODO("Not yet implemented")
     }
 
 

@@ -1,5 +1,6 @@
 package com.example.musicplayer
 
 interface Sujet {
-    fun setObserver(o:musicUpdateObserver)
+    fun addObserver(o:MusicUpdateObserver)
+    fun removeObserver(o:MusicUpdateObserver)
 }
