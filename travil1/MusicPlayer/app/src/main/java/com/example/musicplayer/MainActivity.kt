@@ -1,6 +1,9 @@
 package com.example.musicplayer
 
 import android.os.Bundle
+import android.widget.ListView
+import android.widget.SimpleAdapter
+import android.widget.TextView
 import android.widget.Toast
 import android.widget.Toast.LENGTH_LONG
 import androidx.activity.enableEdgeToEdge
@@ -11,6 +14,7 @@ import androidx.core.view.WindowInsetsCompat
 class MainActivity : AppCompatActivity(), MusicUpdateObserver {
     val url = "https://api.jsonbin.io/v3/b/680a6a1d8561e97a5006b822?meta=false"
     var musicUpdate: Sujet? = null
+    lateinit var playingListe: ListView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,6 +25,7 @@ class MainActivity : AppCompatActivity(), MusicUpdateObserver {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        playingListe = findViewById(R.id.playingListe)
     /*
         val queue = Volley.newRequestQueue(this)
 
@@ -48,7 +53,34 @@ class MainActivity : AppCompatActivity(), MusicUpdateObserver {
     }
 
     fun afficher(lm: ListeMusics){
+        val remplir = ArrayList<HashMap<String, String>>()
 
+        for (music in lm.listeMusic) {
+            val temp = HashMap<String, String>()
+            temp["title"] = music.title
+            temp["sec"] = music.duration.toString()
+            remplir.add(temp)
+        }
+
+        val adap = SimpleAdapter(
+            this,
+            remplir,
+            R.layout.layout,
+            arrayOf("title", "sec"),
+            intArrayOf(R.id.name, R.id.length)
+        )
+        adap.viewBinder = SimpleAdapter.ViewBinder { view, data, textRepresentation ->
+            if (view.id == R.id.name && view is TextView) {
+                view.text = textRepresentation
+                view.isSelected = true  // This enables the marquee to run continuously
+                true  // We handled the binding ourselves
+            } else {
+                false // Default binding for other views
+            }
+        }
+
+
+        playingListe.adapter = adap
     }
 
 
