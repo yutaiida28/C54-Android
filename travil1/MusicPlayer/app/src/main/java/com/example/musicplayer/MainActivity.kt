@@ -1,6 +1,10 @@
 package com.example.musicplayer
 
+import android.content.Context
 import android.os.Bundle
+import android.view.View
+import android.widget.FrameLayout
+import android.widget.ImageView
 import android.widget.ListView
 import android.widget.SimpleAdapter
 import android.widget.TextView
@@ -10,11 +14,13 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.bumptech.glide.Glide
 
 class MainActivity : AppCompatActivity(), MusicUpdateObserver {
     val url = "https://api.jsonbin.io/v3/b/680a6a1d8561e97a5006b822?meta=false"
     var musicUpdate: Sujet? = null
     lateinit var playingListe: ListView
+    lateinit var playingNow: FrameLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +32,7 @@ class MainActivity : AppCompatActivity(), MusicUpdateObserver {
             insets
         }
         playingListe = findViewById(R.id.playingListe)
+        playingNow = findViewById(R.id.playingMusic)
     /*
         val queue = Volley.newRequestQueue(this)
 
@@ -59,16 +66,18 @@ class MainActivity : AppCompatActivity(), MusicUpdateObserver {
             val temp = HashMap<String, String>()
             temp["title"] = music.title
             temp["sec"] = music.duration.toString()
+            temp["image"] = music.image.toString()
             remplir.add(temp)
         }
 
-        val adap = SimpleAdapter(
+        val adap = simpleAdapter2(
             this,
             remplir,
             R.layout.layout,
-            arrayOf("title", "sec"),
-            intArrayOf(R.id.name, R.id.length)
+            arrayOf("title", "sec","image"),
+            intArrayOf(R.id.name, R.id.length, R.id.imageView2)
         )
+//        fait par un ia elle permet d'avoir le nom de la music defiler a linfinie
         adap.viewBinder = SimpleAdapter.ViewBinder { view, data, textRepresentation ->
             if (view.id == R.id.name && view is TextView) {
                 view.text = textRepresentation
@@ -81,8 +90,42 @@ class MainActivity : AppCompatActivity(), MusicUpdateObserver {
 
 
         playingListe.adapter = adap
+        playingListe.setOnItemClickListener { _, _, position, _ ->
+            val selectedMusic = lm.listeMusic[position]
+
+//            retire tous music enterieur qui jouais
+            playingNow.removeAllViews()
+
+//            remplilie le layout avec les infos de la music selectionner
+            val musicView = layoutInflater.inflate(R.layout.layout, playingNow, false)
+
+            val titleView = musicView.findViewById<TextView>(R.id.name)
+            val lengthView = musicView.findViewById<TextView>(R.id.length)
+            val ImageView = musicView.findViewById<TextView>(R.id.imageView2)
+
+            titleView.text = selectedMusic.title
+            titleView.isSelected = true
+            lengthView.text = "${selectedMusic.duration}s"
+
+//            rendre visible
+            playingNow.addView(musicView)
+            playingNow.visibility = View.VISIBLE
+        }
     }
 
+    inner class simpleAdapter2(
+        context: Context,
+        remplir: ArrayList<HashMap<String, String>>,
+        layout: Int,
+        data: Array<String>,
+        to: IntArray
+    ) : SimpleAdapter(context, remplir, layout, data, to){
+        override fun setViewImage(v: ImageView, value: String) {
+            Glide.with(v.context)
+                .load(value)
+                .into(v)
+        }
+    }
 
     override fun error() {
         TODO("Not yet implemented")
