@@ -14,6 +14,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.media3.common.MediaItem
+import androidx.media3.exoplayer.ExoPlayer
 import com.bumptech.glide.Glide
 
 // merci yuta :)
@@ -22,6 +24,8 @@ class MainActivity : AppCompatActivity(), MusicUpdateObserver {
     var musicUpdate: Sujet? = null
     lateinit var playingListe: ListView
     lateinit var playingNow: FrameLayout
+    var player : ExoPlayer? = null;
+    var mp3 : ArrayList<String>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +38,7 @@ class MainActivity : AppCompatActivity(), MusicUpdateObserver {
         }
         playingListe = findViewById(R.id.playingListe)
         playingNow = findViewById(R.id.playingMusic)
+        player = ExoPlayer.Builder(this).build()
     }
 
     override fun onStart() {
@@ -44,6 +49,14 @@ class MainActivity : AppCompatActivity(), MusicUpdateObserver {
 
     override fun succes(lm: ListeMusics) {
         Toast.makeText(this, "response is ${lm.listeMusic.size}", LENGTH_LONG).show()
+
+        for (music in lm.listeMusic){
+            val mediaItem = MediaItem.fromUri(music.source)
+            println(music.source)
+            player?.addMediaItem(mediaItem)
+        }
+
+        Toast.makeText(this, "response is ${player}", LENGTH_LONG).show()
         afficher(lm)
     }
 
@@ -95,6 +108,7 @@ class MainActivity : AppCompatActivity(), MusicUpdateObserver {
                 .into(imageView)
 
 //            rendre visible
+
             playingNow.addView(musicView)
             playingNow.visibility = View.VISIBLE
         }
