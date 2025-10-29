@@ -16,6 +16,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
 
+// merci yuta :)
 class MainActivity : AppCompatActivity(), MusicUpdateObserver {
     val url = "https://api.jsonbin.io/v3/b/680a6a1d8561e97a5006b822?meta=false"
     var musicUpdate: Sujet? = null
@@ -33,19 +34,6 @@ class MainActivity : AppCompatActivity(), MusicUpdateObserver {
         }
         playingListe = findViewById(R.id.playingListe)
         playingNow = findViewById(R.id.playingMusic)
-    /*
-        val queue = Volley.newRequestQueue(this)
-
-        val stringRequest = StringRequest(
-            Request.Method.GET,url,
-            { responce ->
-                val lm:ListeMusics = Klaxon().parse<ListeMusics>(responce) ?: ListeMusics()
-                Toast.makeText(this, "response is ${lm.listeMusic.size}", LENGTH_LONG).show()
-            },
-            { Toast.makeText(this, "fuck you", LENGTH_LONG).show() }
-        )
-        queue.add(stringRequest)
-    */
     }
 
     override fun onStart() {
@@ -92,20 +80,19 @@ class MainActivity : AppCompatActivity(), MusicUpdateObserver {
         playingListe.adapter = adap
         playingListe.setOnItemClickListener { _, _, position, _ ->
             val selectedMusic = lm.listeMusic[position]
-
 //            retire tous music enterieur qui jouais
             playingNow.removeAllViews()
-
 //            remplilie le layout avec les infos de la music selectionner
-            val musicView = layoutInflater.inflate(R.layout.layout, playingNow, false)
+            val musicView = layoutInflater.inflate(R.layout.playing_music_main, playingNow, false)
 
-            val titleView = musicView.findViewById<TextView>(R.id.name)
-            val lengthView = musicView.findViewById<TextView>(R.id.length)
-            val ImageView = musicView.findViewById<TextView>(R.id.imageView2)
+            val titleView = musicView.findViewById<TextView>(R.id.musicTitle)
+            val imageView = musicView.findViewById<ImageView>(R.id.musicIcon)
 
             titleView.text = selectedMusic.title
-            titleView.isSelected = true
-            lengthView.text = "${selectedMusic.duration}s"
+
+            Glide.with(this)
+                .load(selectedMusic.image)
+                .into(imageView)
 
 //            rendre visible
             playingNow.addView(musicView)
