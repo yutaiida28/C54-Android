@@ -52,10 +52,9 @@ class MainActivity : AppCompatActivity(), MusicUpdateObserver {
 
         for (music in lm.listeMusic){
             val mediaItem = MediaItem.fromUri(music.source)
-            println(music.source)
             player?.addMediaItem(mediaItem)
         }
-
+        player?.prepare()
         Toast.makeText(this, "response is ${player}", LENGTH_LONG).show()
         afficher(lm)
     }
@@ -106,9 +105,8 @@ class MainActivity : AppCompatActivity(), MusicUpdateObserver {
             Glide.with(this)
                 .load(selectedMusic.image)
                 .into(imageView)
-
-//            rendre visible
-
+            player?.seekTo(position, 0)
+            player?.play()
             playingNow.addView(musicView)
             playingNow.visibility = View.VISIBLE
         }
