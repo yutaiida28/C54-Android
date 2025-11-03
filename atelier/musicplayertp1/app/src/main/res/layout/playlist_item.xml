@@ -4,9 +4,9 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:padding="12dp"
-    android:background="?attr/selectableItemBackground"
-    android:clickable="true"
-    android:focusable="true">
+    android:background="?attr/selectableItemBackground">
+
+    <!-- RETIREZ android:clickable="true" et android:focusable="true" -->
 
     <!-- Image de l'album miniature -->
     <ImageView
@@ -15,9 +15,7 @@
         android:layout_height="60dp"
         android:scaleType="centerCrop"
         android:src="@drawable/ic_music_note"
-        android:layout_marginEnd="12dp"
-        android:focusable="false"
-        android:clickable="false"/>
+        android:layout_marginEnd="12dp"/>
 
     <!-- Informations de la chanson -->
     <LinearLayout
@@ -25,9 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:orientation="vertical"
-        android:layout_gravity="center_vertical"
-        android:focusable="false"
-        android:clickable="false">
+        android:layout_gravity="center_vertical">
 
         <!-- Titre -->
         <TextView
@@ -41,9 +37,7 @@
             android:ellipsize="marquee"
             android:marqueeRepeatLimit="marquee_forever"
             android:singleLine="true"
-            android:scrollHorizontally="true"
-            android:focusable="false"
-            android:clickable="false"/>
+            android:scrollHorizontally="true"/>
 
         <!-- Artiste -->
         <TextView
@@ -53,9 +47,7 @@
             android:text="Artiste"
             android:textSize="14sp"
             android:textColor="@color/text_secondary"
-            android:layout_marginTop="4dp"
-            android:focusable="false"
-            android:clickable="false"/>
+            android:layout_marginTop="4dp"/>
     </LinearLayout>
 
     <!-- Durée -->
@@ -67,8 +59,6 @@
         android:textSize="14sp"
         android:textColor="@color/text_secondary"
         android:layout_gravity="center_vertical"
-        android:layout_marginStart="12dp"
-        android:focusable="false"
-        android:clickable="false"/>
+        android:layout_marginStart="12dp"/>
 
 </LinearLayout>
