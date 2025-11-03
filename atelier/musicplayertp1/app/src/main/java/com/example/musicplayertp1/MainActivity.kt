@@ -65,6 +65,9 @@ class MainActivity : AppCompatActivity(), MusicUpdateObserver {
         setupSeekBar()
         setupPlayerListener()
 
+        musicUpdate = GetMusic(this, url)
+        musicUpdate?.addObserver(this)
+
         // Enregistrement du launcher avec le callback
         playlistLauncher = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult(),
@@ -127,7 +130,7 @@ class MainActivity : AppCompatActivity(), MusicUpdateObserver {
         }
 
         backward10Button.setOnClickListener {
-            player?.let {
+            player?.let {=
                 val newPosition = it.currentPosition - 10000
                 it.seekTo(newPosition.coerceAtLeast(0))
             }
@@ -136,7 +139,7 @@ class MainActivity : AppCompatActivity(), MusicUpdateObserver {
         // ✅ Bouton pour afficher la playlist avec le launcher
         showPlaylistButton.setOnClickListener {
             musicList?.let { list ->
-                val intent = Intent(this, PlaylistActivity::class.java)
+               val intent = Intent(this, PlaylistActivity::class.java)
                 intent.putExtra("music_list", ArrayList(list.listeMusic))
                 playlistLauncher?.launch(intent)  // ✅ Utilisation du launcher
             }
@@ -264,8 +267,6 @@ class MainActivity : AppCompatActivity(), MusicUpdateObserver {
 
     override fun onStart() {
         super.onStart()
-        musicUpdate = GetMusic(this, url)
-        musicUpdate?.addObserver(this)
         restorePlayerState()
     }
 
