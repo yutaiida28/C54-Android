@@ -2,12 +2,17 @@ package com.example.musicplayer
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.view.View
 import android.widget.ArrayAdapter
+import android.widget.Button
 import android.widget.FrameLayout
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.ListView
+import android.widget.SeekBar
 import android.widget.SimpleAdapter
 import android.widget.TextView
 import android.widget.Toast
@@ -24,8 +29,23 @@ import com.bumptech.glide.Glide
 class MainActivity : AppCompatActivity(), MusicUpdateObserver {
     val url = "https://api.jsonbin.io/v3/b/680a6a1d8561e97a5006b822?meta=false"
     var musicUpdate: Sujet? = null
+    private lateinit var playButton: ImageButton
+    private lateinit var pauseButton: ImageButton
+    private lateinit var nextButton: ImageButton
+    private lateinit var previousButton: ImageButton
+    private lateinit var forward10Button: ImageButton
+    private lateinit var backward10Button: ImageButton
+    private lateinit var seekBar: SeekBar
+    private lateinit var currentTimeText: TextView
+    private lateinit var totalTimeText: TextView
+    private lateinit var songTitleText: TextView
+    private lateinit var artistText: TextView
+    private lateinit var albumImageView: ImageView
+    private lateinit var webLinkButton: Button
+    private var countDownTimer: CountDownTimer? = null
+
     lateinit var playingListe: ListView
-    lateinit var playingNow: FrameLayout
+//    lateinit var playingNow: FrameLayout
     var player : ExoPlayer? = null
     private val musicManager = MusicManager.getInstance()
 
@@ -68,7 +88,7 @@ class MainActivity : AppCompatActivity(), MusicUpdateObserver {
         }
 
         playingListe = findViewById(R.id.playingListe)
-        playingNow = findViewById(R.id.playingMusic)
+//        playingNow = findViewById(R.id.playingMusic)
         player = ExoPlayer.Builder(this).build()
 
         // Setup location button to switch between All Music and Playlists view
@@ -89,6 +109,8 @@ class MainActivity : AppCompatActivity(), MusicUpdateObserver {
             }
         }
 
+
+
         // Setup Add Playlist button
         val addPlaylist = findViewById<TextView>(R.id.AddPlaylist)
         addPlaylist.setOnClickListener {
@@ -104,8 +126,26 @@ class MainActivity : AppCompatActivity(), MusicUpdateObserver {
         if (musicManager.isDataLoaded) {
             afficher(musicManager.getMusicList())
         }
+        initializerViews()
+        setupButtonListeners()
     }
 
+    private fun initializerViews() {
+        playButton = findViewById(R.id.playButton)
+        pauseButton = findViewById(R.id.pauseButton)
+        nextButton = findViewById(R.id.nextButton)
+        previousButton = findViewById(R.id.previousButton)
+        forward10Button = findViewById(R.id.forward10Button)
+        backward10Button = findViewById(R.id.backward10Button)
+        seekBar = findViewById(R.id.seekBar)
+        currentTimeText = findViewById(R.id.currentTime)
+        totalTimeText = findViewById(R.id.totalTime)
+        songTitleText = findViewById(R.id.songTitle)
+        artistText = findViewById(R.id.artist)
+        playingListe = findViewById(R.id.playingListe)
+        albumImageView = findViewById(R.id.albumImage)
+        webLinkButton = findViewById(R.id.webLinkButton)
+    }
     override fun onStart() {
         super.onStart()
         // Only fetch if data hasn't been loaded yet
@@ -166,8 +206,15 @@ class MainActivity : AppCompatActivity(), MusicUpdateObserver {
         playingListe.adapter = adap
         playingListe.setOnItemClickListener { _, _, position, _ ->
             val selectedMusic = lm.listeMusic[position]
-            playMusic(selectedMusic, position)
+            playSongAtPosition(position)
+//            playMusic(selectedMusic, position)
         }
+    }
+    private fun playSongAtPosition(position: Int) {
+        player?.seekTo(position, 0)
+        player?.play()
+        updateUIForCurrentSong()
+        startSeekBarUpdate()
     }
 
     private fun displayPlaylists() {
@@ -231,30 +278,13 @@ class MainActivity : AppCompatActivity(), MusicUpdateObserver {
             val selectedMusic = playlistMusic[position]
             // Get the original position in the full music list
             val originalPosition = playlist.musicIndices[position]
-            playMusic(selectedMusic, originalPosition)
+            playSongAtPosition(originalPosition)
+//            playMusic(selectedMusic, originalPosition)
         }
 
         Toast.makeText(this, "Playing: ${playlist.name}", Toast.LENGTH_SHORT).show()
     }
 
-    private fun playMusic(music: Music, position: Int) {
-        playingNow.removeAllViews()
-        val musicView = layoutInflater.inflate(R.layout.playing_music_main, playingNow, false)
-
-        val titleView = musicView.findViewById<TextView>(R.id.musicTitle)
-        val imageView = musicView.findViewById<ImageView>(R.id.musicIcon)
-
-        titleView.text = music.title
-
-        Glide.with(this)
-            .load(music.image)
-            .into(imageView)
-
-        player?.seekTo(position, 0)
-        player?.play()
-        playingNow.addView(musicView)
-        playingNow.visibility = View.VISIBLE
-    }
 
     inner class simpleAdapter2(
         context: Context,
@@ -270,6 +300,114 @@ class MainActivity : AppCompatActivity(), MusicUpdateObserver {
         }
     }
 
+    private fun setupButtonListeners() {
+        playButton.setOnClickListener {
+            player?.play()
+            startSeekBarUpdate()
+        }
+        pauseButton.setOnClickListener {
+            player?.pause()
+            stopSeekBarUpdate()
+        }
+        nextButton.setOnClickListener {
+            if (player?.hasNextMediaItem() == true) {
+                player?.seekToNext()
+                resetSeekBar()
+            } else {
+                Toast.makeText(this, "Dernière chanson de la playlist", Toast.LENGTH_SHORT).show()
+            }
+        }
+        previousButton.setOnClickListener {
+            if (player?.hasPreviousMediaItem() == true) {
+                player?.seekToPrevious()
+                resetSeekBar()
+            } else {
+                Toast.makeText(this, "Première chanson de la playlist", Toast.LENGTH_SHORT).show()
+            }
+        }
+        forward10Button.setOnClickListener {
+            player?.let {
+                val newPosition = it.currentPosition + 10000
+                it.seekTo(newPosition.coerceAtMost(it.duration))
+            }
+        }
+        backward10Button.setOnClickListener {
+            player?.let {
+                val newPosition = it.currentPosition - 10000
+                it.seekTo(newPosition.coerceAtLeast(0))
+            }
+        }
+
+        seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                if (fromUser) {
+                    player?.seekTo(progress.toLong())
+                }
+            }
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+        })
+        webLinkButton.setOnClickListener {
+            val currentIndex = player?.currentMediaItemIndex ?: 0
+            val musicList = musicManager.getMusicList()
+            if (currentIndex < musicList.listeMusic.size) {
+                val webUrl = musicList.listeMusic[currentIndex].site
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(webUrl))
+                startActivity(intent)
+            }
+        }
+    }
+
+    private fun updateUIForCurrentSong() {
+        val musicList = musicManager.getMusicList()
+        if (musicList.listeMusic.isNotEmpty()) {
+            val currentIndex = player?.currentMediaItemIndex ?: 0
+            if (currentIndex < musicList.listeMusic.size) {
+                val currentMusic = musicList.listeMusic[currentIndex]
+
+                songTitleText.text = currentMusic.title
+                artistText.text = currentMusic.artist
+
+                Glide.with(this)
+                    .load(currentMusic.image)
+                    .into(albumImageView)
+
+                val durationMillis = currentMusic.duration * 1000L
+                totalTimeText.text = formatTime(durationMillis)
+                seekBar.max = durationMillis.toInt()
+            }
+        }
+    }
+    private fun startSeekBarUpdate() {
+        stopSeekBarUpdate()
+        countDownTimer = object : CountDownTimer(Long.MAX_VALUE, 100) {
+            override fun onTick(millisUntilFinished: Long) {
+                player?.let {
+                    seekBar.progress = it.currentPosition.toInt()
+                    currentTimeText.text = formatTime(it.currentPosition)
+                }
+            }
+
+            override fun onFinish() {}
+        }.start()
+    }
+    private fun stopSeekBarUpdate() {
+        countDownTimer?.cancel()
+    }
+    private fun resetSeekBar() {
+        stopSeekBarUpdate()
+        seekBar.progress = 0
+        currentTimeText.text = "0:00"
+
+        updateUIForCurrentSong()
+        startSeekBarUpdate()
+    }
+    private fun formatTime(millis: Long): String {
+        val seconds = (millis / 1000).toInt()
+        val minutes = seconds / 60
+        val secs = seconds % 60
+        return String.format("%d:%02d", minutes, secs)
+    }
     override fun error() {
         Toast.makeText(this, "Error loading music", LENGTH_LONG).show()
     }

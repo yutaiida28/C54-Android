@@ -21,7 +21,8 @@
         android:layout_width="70dp"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:text="TextView" />
+        android:text="TextView"
+        android:textColor="@color/text_secondary"/>
 
     <Space
         android:layout_width="15dp"
@@ -39,7 +40,8 @@
         android:singleLine="true"
         android:focusable="false"
         android:focusableInTouchMode="false"
-        android:gravity="center" />
+        android:gravity="center"
+        android:textColor="@color/text_primary"/>
 
 
 </LinearLayout>

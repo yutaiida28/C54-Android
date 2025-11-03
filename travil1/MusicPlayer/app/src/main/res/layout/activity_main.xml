@@ -74,7 +74,9 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="3"
-            android:text="home " />
+            android:text="All Music"
+            android:textColor="@color/primary"
+            android:textSize="20sp" />
 
     </LinearLayout>
 

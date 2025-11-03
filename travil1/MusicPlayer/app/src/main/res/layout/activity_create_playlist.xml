@@ -5,6 +5,10 @@
     android:orientation="vertical"
     android:padding="16dp">
 
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="30dp" />
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -12,24 +16,27 @@
         android:textSize="24sp"
         android:textStyle="bold"
         android:paddingBottom="16dp"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:textColor="@color/text_primary"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Playlist Name:"
         android:textSize="16sp"
-        android:paddingBottom="8dp"/>
+        android:paddingBottom="8dp"
+        android:textColor="@color/text_primary"/>
 
     <EditText
         android:id="@+id/playlistNameEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@android:drawable/edit_text"
         android:hint="Enter playlist name"
         android:inputType="text"
         android:maxLines="1"
         android:padding="12dp"
-        android:background="@android:drawable/edit_text"/>
+        android:textColor="@color/text_primary" />
 
     <TextView
         android:layout_width="match_parent"
@@ -37,7 +44,8 @@
         android:text="Select Songs:"
         android:textSize="16sp"
         android:paddingTop="16dp"
-        android:paddingBottom="8dp"/>
+        android:paddingBottom="8dp"
+        android:textColor="@color/text_primary"/>
 
     <ListView
         android:id="@+id/musicListView"
