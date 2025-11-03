@@ -6,7 +6,63 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MainActivity" >
+    android:paddingLeft="15dp"
+    android:paddingTop="15dp"
+    android:paddingRight="15dp"
+    android:paddingBottom="15dp"
+    tools:context=".MainActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/albumImage"
+            android:layout_width="132dp"
+            android:layout_height="123dp"
+            android:layout_marginBottom="24dp"
+            android:elevation="4dp"
+            android:paddingLeft="10dp"
+            android:paddingTop="10dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_music_note" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/songTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:ellipsize="marquee"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:gravity="center"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:scrollHorizontally="true"
+                android:singleLine="true"
+                android:text="Titre de la chanson"
+                android:textColor="@color/text_primary"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/artist"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                android:gravity="center"
+                android:text="Artiste"
+                android:textColor="@color/text_secondary"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,34 +76,12 @@
             android:layout_weight="3"
             android:text="home " />
 
-        <TextView
-            android:id="@+id/connection"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="2"
-            android:text="deconnecter " />
-
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="TextView" />
-
     </LinearLayout>
-
-    <FrameLayout
-        android:id="@+id/playingMusic"
-        android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:visibility="visible">
-
-    </FrameLayout>
 
     <ListView
         android:id="@+id/playingListe"
         android:layout_width="match_parent"
-        android:layout_height="250dp" />
+        android:layout_height="265dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -56,27 +90,139 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingTop="20dp"
+            android:paddingEnd="10dp">
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/currentTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="0:00"
+                android:textColor="@color/text_secondary" />
+
+            <SeekBar
+                android:id="@+id/seekBar"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:paddingStart="10dp"
-                android:text="PlayList" />
+                android:progressTint="@color/accent"
+                android:thumbTint="@color/accent" />
 
             <TextView
-                android:id="@+id/AddPlaylist"
-                android:layout_width="0dp"
+                android:id="@+id/totalTime"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:paddingEnd="10dp"
-                android:text="Add Playlist"
-                android:textAlignment="textEnd" />
+                android:layout_marginStart="8dp"
+                android:text="0:00"
+                android:textColor="@color/text_secondary" />
 
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <!-- Reculer de 10 secondes -->
+            <ImageButton
+                android:id="@+id/backward10Button"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_margin="8dp"
+                android:background="@drawable/button_background"
+                android:contentDescription="Reculer 10 secondes"
+                android:src="@drawable/ic_backward_10" />
+
+            <!-- Chanson précédente -->
+            <ImageButton
+                android:id="@+id/previousButton"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_margin="8dp"
+                android:background="@drawable/button_background"
+                android:contentDescription="Précédent"
+                android:src="@drawable/ic_previous" />
+
+            <!-- Play -->
+            <ImageButton
+                android:id="@+id/playButton"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:layout_margin="8dp"
+                android:background="@drawable/button_background_primary"
+                android:contentDescription="Lecture"
+                android:src="@drawable/ic_play" />
+
+            <!-- Pause -->
+            <ImageButton
+                android:id="@+id/pauseButton"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:layout_margin="8dp"
+                android:background="@drawable/button_background_primary"
+                android:contentDescription="Pause"
+                android:src="@drawable/ic_pause" />
+
+            <!-- Chanson suivante -->
+            <ImageButton
+                android:id="@+id/nextButton"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_margin="8dp"
+                android:background="@drawable/button_background"
+                android:contentDescription="Suivant"
+                android:src="@drawable/ic_next" />
+
+            <!-- Avancer de 10 secondes -->
+            <ImageButton
+                android:id="@+id/forward10Button"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_margin="8dp"
+                android:background="@drawable/button_background"
+                android:contentDescription="Avancer 10 secondes"
+                android:src="@drawable/ic_forward_10" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <!-- Bouton Playlist -->
+        <Button
+            android:id="@+id/AddPlaylist"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:layout_weight="1"
+            android:background="@drawable/button_background"
+            android:text="Playlist"
+            android:textColor="@color/text_primary" />
+
+        <!-- Bouton Lien Web -->
+        <Button
+            android:id="@+id/webLinkButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:layout_weight="1"
+            android:background="@drawable/button_background"
+            android:text="Site Web"
+            android:textColor="@color/text_primary" />
     </LinearLayout>
 
 </LinearLayout>

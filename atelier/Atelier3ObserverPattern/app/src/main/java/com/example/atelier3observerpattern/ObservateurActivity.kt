@@ -9,10 +9,11 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
 
-class ObservateurActivity : AppCompatActivity(), ObservateurChangement {
 
+class ObservateurActivity : AppCompatActivity(), ObservateurChangement {
     lateinit var texte: TextView
     var leModele: Sujet? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         this.enableEdgeToEdge()

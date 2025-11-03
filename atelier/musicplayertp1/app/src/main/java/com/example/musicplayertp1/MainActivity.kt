@@ -8,11 +8,14 @@ import android.os.Bundle
 import android.os.CountDownTimer
 import android.view.View
 import android.widget.*
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
@@ -38,6 +41,7 @@ class MainActivity : AppCompatActivity(), MusicUpdateObserver {
     private lateinit var songTitleText: TextView
     private lateinit var artistText: TextView
     private lateinit var albumImageView: ImageView
+    lateinit var playingListe: ListView
     private lateinit var showPlaylistButton: Button
     private lateinit var webLinkButton: Button
 
@@ -45,17 +49,29 @@ class MainActivity : AppCompatActivity(), MusicUpdateObserver {
     private var musicList: ListeMusics? = null
     private var countDownTimer: CountDownTimer? = null
     private lateinit var prefs: SharedPreferences
+    private var currentDisplayMode = DisplayMode.ALL_MUSIC
 
     // Launcher pour le pattern boomerang
     var playlistLauncher: ActivityResultLauncher<Intent>? = null
 
+    enum class DisplayMode {
+        ALL_MUSIC,
+        PLAYLIST
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         setContentView(R.layout.activity_main)
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
 
         prefs = getSharedPreferences("MusicPlayerPrefs", MODE_PRIVATE)
 
-        initializeViews()
+        initializerViews()
 
         player = ExoPlayer.Builder(this).build()
         playerView.player = player
@@ -71,11 +87,15 @@ class MainActivity : AppCompatActivity(), MusicUpdateObserver {
         // Enregistrement du launcher avec le callback
         playlistLauncher = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult(),
-            CallBackPlaylist()  // ✅ Inner class callback
+            CallBackPlaylist()
         )
     }
+    override fun onStart() {
+        super.onStart()
+        restorePlayerState()
+    }
 
-    private fun initializeViews() {
+    private fun initializerViews() {
         playerView = findViewById(R.id.playerView)
         playButton = findViewById(R.id.playButton)
         pauseButton = findViewById(R.id.pauseButton)
@@ -91,6 +111,7 @@ class MainActivity : AppCompatActivity(), MusicUpdateObserver {
         albumImageView = findViewById(R.id.albumImage)
         showPlaylistButton = findViewById(R.id.showPlaylistButton)
         webLinkButton = findViewById(R.id.webLinkButton)
+        playingListe = findViewById(R.id.playingListe)
     }
 
     private fun setupButtonListeners() {
@@ -98,12 +119,10 @@ class MainActivity : AppCompatActivity(), MusicUpdateObserver {
             player?.play()
             startSeekBarUpdate()
         }
-
         pauseButton.setOnClickListener {
             player?.pause()
             stopSeekBarUpdate()
         }
-
         nextButton.setOnClickListener {
             if (player?.hasNextMediaItem() == true) {
                 player?.seekToNext()
@@ -112,7 +131,6 @@ class MainActivity : AppCompatActivity(), MusicUpdateObserver {
                 Toast.makeText(this, "Dernière chanson de la playlist", Toast.LENGTH_SHORT).show()
             }
         }
-
         previousButton.setOnClickListener {
             if (player?.hasPreviousMediaItem() == true) {
                 player?.seekToPrevious()
@@ -121,30 +139,25 @@ class MainActivity : AppCompatActivity(), MusicUpdateObserver {
                 Toast.makeText(this, "Première chanson de la playlist", Toast.LENGTH_SHORT).show()
             }
         }
-
         forward10Button.setOnClickListener {
             player?.let {
                 val newPosition = it.currentPosition + 10000
                 it.seekTo(newPosition.coerceAtMost(it.duration))
             }
         }
-
         backward10Button.setOnClickListener {
-            player?.let {=
+            player?.let {
                 val newPosition = it.currentPosition - 10000
                 it.seekTo(newPosition.coerceAtLeast(0))
             }
         }
-
-        // ✅ Bouton pour afficher la playlist avec le launcher
         showPlaylistButton.setOnClickListener {
             musicList?.let { list ->
                val intent = Intent(this, PlaylistActivity::class.java)
                 intent.putExtra("music_list", ArrayList(list.listeMusic))
-                playlistLauncher?.launch(intent)  // ✅ Utilisation du launcher
+                playlistLauncher?.launch(intent)
             }
         }
-
         webLinkButton.setOnClickListener {
             musicList?.let { list ->
                 val currentIndex = player?.currentMediaItemIndex ?: 0
@@ -157,7 +170,6 @@ class MainActivity : AppCompatActivity(), MusicUpdateObserver {
         }
     }
 
-    // ✅ Inner class pour gérer le retour de PlaylistActivity (pattern boomerang)
     inner class CallBackPlaylist : ActivityResultCallback<ActivityResult> {
         override fun onActivityResult(result: ActivityResult) {
             if (result.resultCode == Activity.RESULT_OK) {
@@ -175,8 +187,6 @@ class MainActivity : AppCompatActivity(), MusicUpdateObserver {
         updateUIForCurrentSong()
         startSeekBarUpdate()
     }
-
-    // ... (le reste de votre code reste identique)
 
     private fun setupSeekBar() {
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
@@ -265,10 +275,7 @@ class MainActivity : AppCompatActivity(), MusicUpdateObserver {
         return String.format("%d:%02d", minutes, secs)
     }
 
-    override fun onStart() {
-        super.onStart()
-        restorePlayerState()
-    }
+
 
     override fun succes(lm: ListeMusics) {
         musicList = lm

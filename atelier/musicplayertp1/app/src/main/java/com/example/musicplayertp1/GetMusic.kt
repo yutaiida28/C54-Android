@@ -15,33 +15,29 @@ class GetMusic(context: Context, url: String) : Sujet{
     private val url = url
     private val context = context
     // Liste des observateurs qui seront notifiés
-    private val observers = mutableListOf<MusicUpdateObserver>()
+    private val mObs = mutableListOf<MusicUpdateObserver>()
 
     init {
-        // Démarrage de la requête dès la création de l'objet
+
         fetchMusicData()
     }
 
-    /**
-     * Ajoute un observateur à la liste
-     */
-    override fun addObserver(observer: MusicUpdateObserver) {
-        observers.add(observer)
+//  rajouter observer
+    override fun addObserver(o: MusicUpdateObserver) {
+        mObs.add(o)
     }
 
-    /**
-     * Retire un observateur de la liste
-     */
-    override fun removeObserver(observer: MusicUpdateObserver) {
-        observers.remove(observer)
+//  retire observer
+    override fun removeObserver(o: MusicUpdateObserver) {
+        mObs.remove(o)
     }
 
     /**
      * Notifie tous les observateurs du succès avec les données
      */
     override fun notifySuccess(lm: ListeMusics) {
-        for (observer in observers) {
-            observer.succes(lm)
+        for (o in mObs) {
+            o.succes(lm)
         }
     }
 
@@ -49,8 +45,8 @@ class GetMusic(context: Context, url: String) : Sujet{
      * Notifie tous les observateurs d'une erreur
      */
     override fun notifyError() {
-        for (observer in observers) {
-            observer.error()
+        for (o in mObs) {
+            o.error()
         }
     }
 
@@ -68,8 +64,7 @@ class GetMusic(context: Context, url: String) : Sujet{
             { response ->
                 // Succès - parsing du JSON avec Klaxon
                 try {
-                    val klaxon = Klaxon()
-                    val musicList = klaxon.parse<ListeMusics>(response)
+                    val musicList = Klaxon().parse<ListeMusics>(response) ?: ListeMusics()
 
                     if (musicList != null) {
                         // Notification des observateurs avec les données
@@ -79,13 +74,11 @@ class GetMusic(context: Context, url: String) : Sujet{
                         notifyError()
                     }
                 } catch (e: Exception) {
-                    e.printStackTrace()
                     notifyError()
                 }
             },
             { error ->
                 // Erreur de réseau
-                error.printStackTrace()
                 notifyError()
             }
         )

@@ -8,7 +8,10 @@ import android.widget.ImageView
 import android.widget.ListView
 import android.widget.SimpleAdapter
 import android.widget.TextView
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
 
 /**
@@ -23,12 +26,16 @@ class PlaylistActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         setContentView(R.layout.activity_playlist)
-
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
         // Récupération de la liste de musiques passée par l'intent (ArrayList)
-        @Suppress("UNCHECKED_CAST", "DEPRECATION")
-        musicList = intent.getSerializableExtra("music_list") as? ArrayList<Music>
 
+        musicList = intent.getSerializableExtra("music_list") as? ArrayList<Music>
         playlistView = findViewById(R.id.playlistView)
 
         // Affichage de la playlist

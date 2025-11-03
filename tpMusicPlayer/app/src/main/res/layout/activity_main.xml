@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_dark"
     android:orientation="vertical"
-    android:padding="16dp">
+    tools:context=".MainActivity">
 
-    <!-- PlayerView avec contrôles désactivés -->
     <androidx.media3.ui.PlayerView
         android:id="@+id/playerView"
         android:layout_width="0dp"
@@ -16,61 +15,41 @@
         android:visibility="gone"
         app:use_controller="false" />
 
-    <!-- Image de l'album -->
-    <LinearLayout
+    <ImageView
+        android:id="@+id/albumImage"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_marginBottom="24dp"
+        android:elevation="4dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_music_note" />
+    <TextView
+        android:id="@+id/songTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:id="@+id/albumImage"
-            android:layout_width="132dp"
-            android:layout_height="123dp"
-            android:layout_marginBottom="24dp"
-            android:elevation="4dp"
-            android:paddingLeft="10dp"
-            android:paddingTop="10dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_music_note" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/songTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:ellipsize="marquee"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:gravity="center"
-                android:marqueeRepeatLimit="marquee_forever"
-                android:scrollHorizontally="true"
-                android:singleLine="true"
-                android:text="Titre de la chanson"
-                android:textColor="@color/text_primary"
-                android:textSize="24sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/artist"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
-                android:gravity="center"
-                android:text="Artiste"
-                android:textColor="@color/text_secondary"
-                android:textSize="18sp" />
-        </LinearLayout>
-    </LinearLayout>
-
-    <!-- Titre de la chanson -->
+        android:layout_marginBottom="8dp"
+        android:ellipsize="marquee"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:gravity="center"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:scrollHorizontally="true"
+        android:singleLine="true"
+        android:text="Titre de la chanson"
+        android:textColor="@color/text_primary"
+        android:textSize="24sp"
+        android:textStyle="bold" />
 
     <!-- Artiste -->
+    <TextView
+        android:id="@+id/artist"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:gravity="center"
+        android:text="Artiste"
+        android:textColor="@color/text_secondary"
+        android:textSize="18sp" />
 
     <!-- SeekBar et temps -->
     <LinearLayout
@@ -78,9 +57,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingLeft="10dp"
-        android:paddingEnd="10dp">
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/currentTime"
@@ -105,22 +82,9 @@
             android:layout_marginStart="8dp"
             android:text="0:00"
             android:textColor="@color/text_secondary" />
-
     </LinearLayout>
 
     <!-- Contrôles de navigation -->
-    <TextView
-        android:id="@+id/location"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/text_secondary"
-        android:text="TextView" />
-
-    <ListView
-        android:id="@+id/playingListe"
-        android:layout_width="match_parent"
-        android:layout_height="311dp" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
