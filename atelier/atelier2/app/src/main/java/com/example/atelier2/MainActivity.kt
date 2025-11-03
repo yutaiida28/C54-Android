@@ -12,7 +12,7 @@ import androidx.media3.ui.PlayerView
 
 class MainActivity : AppCompatActivity() {
     lateinit var playerView: PlayerView
-    var player : ExoPlayer? = null; // ici on donne acces sur  a player de onCreate
+    var player : ExoPlayer? = null // ici on donne acces sur  a player de onCreate
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         // il serat interdit de utiliser player view
         playerView.player = player
         // plus que c'est un acces externe qui require wifi il faut aller rajouter une permission dansle manifest
-        val mp3url = "https://storage.googleapis.com/uamp/The_Kyoto_Connection_-_Wake_Up/01_-_Intro_-_The_Way_Of_Waking_Up_feat_Alan_Watts.mp3";
+        val mp3url = "https://storage.googleapis.com/uamp/The_Kyoto_Connection_-_Wake_Up/01_-_Intro_-_The_Way_Of_Waking_Up_feat_Alan_Watts.mp3"
         // creer un MediaItem
         val mediaItem = MediaItem.fromUri(mp3url)
         player?.addMediaItem(mediaItem)

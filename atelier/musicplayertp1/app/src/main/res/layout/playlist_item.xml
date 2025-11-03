@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="12dp"
+    android:background="?attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true">
+
+    <!-- Image de l'album miniature -->
+    <ImageView
+        android:id="@+id/itemImage"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_music_note"
+        android:layout_marginEnd="12dp"
+        android:focusable="false"
+        android:clickable="false"/>
+
+    <!-- Informations de la chanson -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:layout_gravity="center_vertical"
+        android:focusable="false"
+        android:clickable="false">
+
+        <!-- Titre -->
+        <TextView
+            android:id="@+id/itemTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Titre"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/text_primary"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
+            android:scrollHorizontally="true"
+            android:focusable="false"
+            android:clickable="false"/>
+
+        <!-- Artiste -->
+        <TextView
+            android:id="@+id/itemArtist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Artiste"
+            android:textSize="14sp"
+            android:textColor="@color/text_secondary"
+            android:layout_marginTop="4dp"
+            android:focusable="false"
+            android:clickable="false"/>
+    </LinearLayout>
+
+    <!-- Durée -->
+    <TextView
+        android:id="@+id/itemDuration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0:00"
+        android:textSize="14sp"
+        android:textColor="@color/text_secondary"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="12dp"
+        android:focusable="false"
+        android:clickable="false"/>
+
+</LinearLayout>

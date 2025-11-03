@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/background_dark"
+    android:padding="16dp">
+
+    <!-- PlayerView avec contrôles désactivés -->
+    <androidx.media3.ui.PlayerView
+        android:id="@+id/playerView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:use_controller="false" />
+
+    <!-- Image de l'album -->
+    <ImageView
+        android:id="@+id/albumImage"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_music_note"
+        android:layout_marginBottom="24dp"
+        android:elevation="4dp"/>
+
+    <!-- Titre de la chanson -->
+    <TextView
+        android:id="@+id/songTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Titre de la chanson"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="@color/text_primary"
+        android:gravity="center"
+        android:ellipsize="marquee"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:singleLine="true"
+        android:scrollHorizontally="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:layout_marginBottom="8dp"/>
+
+    <!-- Artiste -->
+    <TextView
+        android:id="@+id/artist"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Artiste"
+        android:textSize="18sp"
+        android:textColor="@color/text_secondary"
+        android:gravity="center"
+        android:layout_marginBottom="24dp"/>
+
+    <!-- SeekBar et temps -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="8dp">
+
+        <TextView
+            android:id="@+id/currentTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0:00"
+            android:textColor="@color/text_secondary"
+            android:layout_marginEnd="8dp"/>
+
+        <SeekBar
+            android:id="@+id/seekBar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:progressTint="@color/accent"
+            android:thumbTint="@color/accent"/>
+
+        <TextView
+            android:id="@+id/totalTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0:00"
+            android:textColor="@color/text_secondary"
+            android:layout_marginStart="8dp"/>
+    </LinearLayout>
+
+    <!-- Contrôles de navigation -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp">
+
+        <!-- Reculer de 10 secondes -->
+        <ImageButton
+            android:id="@+id/backward10Button"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/ic_backward_10"
+            android:background="@drawable/button_background"
+            android:contentDescription="Reculer 10 secondes"
+            android:layout_margin="8dp"/>
+
+        <!-- Chanson précédente -->
+        <ImageButton
+            android:id="@+id/previousButton"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:src="@drawable/ic_previous"
+            android:background="@drawable/button_background"
+            android:contentDescription="Précédent"
+            android:layout_margin="8dp"/>
+
+        <!-- Play -->
+        <ImageButton
+            android:id="@+id/playButton"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:src="@drawable/ic_play"
+            android:background="@drawable/button_background_primary"
+            android:contentDescription="Lecture"
+            android:layout_margin="8dp"/>
+
+        <!-- Pause -->
+        <ImageButton
+            android:id="@+id/pauseButton"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:src="@drawable/ic_pause"
+            android:background="@drawable/button_background_primary"
+            android:contentDescription="Pause"
+            android:layout_margin="8dp"/>
+
+        <!-- Chanson suivante -->
+        <ImageButton
+            android:id="@+id/nextButton"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:src="@drawable/ic_next"
+            android:background="@drawable/button_background"
+            android:contentDescription="Suivant"
+            android:layout_margin="8dp"/>
+
+        <!-- Avancer de 10 secondes -->
+        <ImageButton
+            android:id="@+id/forward10Button"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/ic_forward_10"
+            android:background="@drawable/button_background"
+            android:contentDescription="Avancer 10 secondes"
+            android:layout_margin="8dp"/>
+    </LinearLayout>
+
+    <!-- Boutons supplémentaires -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="16dp">
+
+        <!-- Bouton Playlist -->
+        <Button
+            android:id="@+id/showPlaylistButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Playlist"
+            android:textColor="@color/text_primary"
+            android:background="@drawable/button_background"
+            android:layout_margin="8dp"/>
+
+        <!-- Bouton Lien Web -->
+        <Button
+            android:id="@+id/webLinkButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Site Web"
+            android:textColor="@color/text_primary"
+            android:background="@drawable/button_background"
+            android:layout_margin="8dp"/>
+    </LinearLayout>
+
+</LinearLayout>
