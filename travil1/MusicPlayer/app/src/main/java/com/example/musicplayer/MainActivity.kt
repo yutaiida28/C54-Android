@@ -1,4 +1,4 @@
-package com.example.musicplayer
+﻿package com.example.musicplayer
 
 import android.content.Context
 import android.content.Intent
@@ -45,9 +45,9 @@ class MainActivity : AppCompatActivity(), MusicUpdateObserver {
     private var countDownTimer: CountDownTimer? = null
 
     lateinit var playingListe: ListView
-//    lateinit var playingNow: FrameLayout
     var player : ExoPlayer? = null
     private val musicManager = MusicManager.getInstance()
+    private val displayHelper = HelperAffichage() //un helper car jai trouver qui a du code dont complique ma lecture ducode
 
     private var currentDisplayMode = DisplayMode.ALL_MUSIC // Track what we're displaying
 
@@ -72,7 +72,6 @@ class MainActivity : AppCompatActivity(), MusicUpdateObserver {
                 LENGTH_LONG
             ).show()
 
-            // Display the newly created playlist
             displayPlaylists()
         }
     }
@@ -88,9 +87,8 @@ class MainActivity : AppCompatActivity(), MusicUpdateObserver {
         }
 
         playingListe = findViewById(R.id.playingListe)
-//        playingNow = findViewById(R.id.playingMusic)
         player = ExoPlayer.Builder(this).build()
-
+//        changer le contenue des listeview entre playlists et toutes les music
         // Setup location button to switch between All Music and Playlists view
         val location = findViewById<TextView>(R.id.location)
         location.text = "All Music"
@@ -111,7 +109,7 @@ class MainActivity : AppCompatActivity(), MusicUpdateObserver {
 
 
 
-        // Setup Add Playlist button
+        // bouton pour creer une playliste
         val addPlaylist = findViewById<TextView>(R.id.AddPlaylist)
         addPlaylist.setOnClickListener {
             if (musicManager.isDataLoaded) {
@@ -122,7 +120,7 @@ class MainActivity : AppCompatActivity(), MusicUpdateObserver {
             }
         }
 
-        // If data is already loaded, display it immediately
+        //si music deja telecharger affiche
         if (musicManager.isDataLoaded) {
             afficher(musicManager.getMusicList())
         }
@@ -148,7 +146,7 @@ class MainActivity : AppCompatActivity(), MusicUpdateObserver {
     }
     override fun onStart() {
         super.onStart()
-        // Only fetch if data hasn't been loaded yet
+        // lfetch si seulment music na pas ete loader
         if (!musicManager.isDataLoaded) {
             musicUpdate = GetMusic(this, url)
             (musicUpdate as GetMusic).addObserver(this)
@@ -158,10 +156,10 @@ class MainActivity : AppCompatActivity(), MusicUpdateObserver {
     override fun succes(lm: ListeMusics) {
         Toast.makeText(this, "Loaded ${lm.listeMusic.size} songs", LENGTH_LONG).show()
 
-        // Update the singleton with the music list
+        // mise a niveaux du singleton
         musicManager.updateMusicList(lm)
 
-        // Clear existing player items first
+        // vide le mediaitem
         player?.clearMediaItems()
 
         for (music in lm.listeMusic){
@@ -175,48 +173,21 @@ class MainActivity : AppCompatActivity(), MusicUpdateObserver {
 
     fun afficher(lm: ListeMusics){
         currentDisplayMode = DisplayMode.ALL_MUSIC
-        val remplir = ArrayList<HashMap<String, String>>()
-
-        for (music in lm.listeMusic) {
-            val temp = HashMap<String, String>()
-            temp["title"] = music.title
-            temp["sec"] = music.duration.toString()
-            temp["image"] = music.image.toString()
-            remplir.add(temp)
-        }
-
-        val adap = simpleAdapter2(
+        displayHelper.setupMusicListView(
             this,
-            remplir,
-            R.layout.layout,
-            arrayOf("title", "sec","image"),
-            intArrayOf(R.id.name, R.id.length, R.id.imageView2)
-        )
-
-        adap.viewBinder = SimpleAdapter.ViewBinder { view, data, textRepresentation ->
-            if (view.id == R.id.name && view is TextView) {
-                view.text = textRepresentation
-                view.isSelected = true
-                true
-            } else {
-                false
-            }
-        }
-
-        playingListe.adapter = adap
-        playingListe.setOnItemClickListener { _, _, position, _ ->
-            val selectedMusic = lm.listeMusic[position]
+            playingListe,
+            lm.listeMusic
+        ) { position, _ ->
             playSongAtPosition(position)
-//            playMusic(selectedMusic, position)
         }
     }
     private fun playSongAtPosition(position: Int) {
         player?.seekTo(position, 0)
         player?.play()
-        updateUIForCurrentSong()
+        updateCurentSong()
         startSeekBarUpdate()
     }
-
+//    afficher les playliste creer
     private fun displayPlaylists() {
         currentDisplayMode = DisplayMode.PLAYLIST
         val playlists = musicManager.getPlaylists()
@@ -242,64 +213,22 @@ class MainActivity : AppCompatActivity(), MusicUpdateObserver {
             displayPlaylistMusic(selectedPlaylist)
         }
     }
-
+//    affiche toutes les music loader
     private fun displayPlaylistMusic(playlist: Playlist) {
         val playlistMusic = musicManager.getMusicFromPlaylist(playlist)
 
-        val remplir = ArrayList<HashMap<String, String>>()
-        for (music in playlistMusic) {
-            val temp = HashMap<String, String>()
-            temp["title"] = music.title
-            temp["sec"] = music.duration.toString()
-            temp["image"] = music.image.toString()
-            remplir.add(temp)
-        }
-
-        val adap = simpleAdapter2(
+        displayHelper.setupMusicListView(
             this,
-            remplir,
-            R.layout.layout,
-            arrayOf("title", "sec","image"),
-            intArrayOf(R.id.name, R.id.length, R.id.imageView2)
-        )
-
-        adap.viewBinder = SimpleAdapter.ViewBinder { view, data, textRepresentation ->
-            if (view.id == R.id.name && view is TextView) {
-                view.text = textRepresentation
-                view.isSelected = true
-                true
-            } else {
-                false
-            }
-        }
-
-        playingListe.adapter = adap
-        playingListe.setOnItemClickListener { _, _, position, _ ->
-            val selectedMusic = playlistMusic[position]
-            // Get the original position in the full music list
+            playingListe,
+            playlistMusic
+        ) { position, _ ->
             val originalPosition = playlist.musicIndices[position]
             playSongAtPosition(originalPosition)
-//            playMusic(selectedMusic, originalPosition)
         }
 
         Toast.makeText(this, "Playing: ${playlist.name}", Toast.LENGTH_SHORT).show()
     }
-
-
-    inner class simpleAdapter2(
-        context: Context,
-        remplir: ArrayList<HashMap<String, String>>,
-        layout: Int,
-        data: Array<String>,
-        to: IntArray
-    ) : SimpleAdapter(context, remplir, layout, data, to){
-        override fun setViewImage(v: ImageView, value: String) {
-            Glide.with(v.context)
-                .load(value)
-                .into(v)
-        }
-    }
-
+// initialise toute les bouton de controlle
     private fun setupButtonListeners() {
         playButton.setOnClickListener {
             player?.play()
@@ -358,7 +287,7 @@ class MainActivity : AppCompatActivity(), MusicUpdateObserver {
         }
     }
 
-    private fun updateUIForCurrentSong() {
+    private fun updateCurentSong() {
         val musicList = musicManager.getMusicList()
         if (musicList.listeMusic.isNotEmpty()) {
             val currentIndex = player?.currentMediaItemIndex ?: 0
@@ -378,6 +307,7 @@ class MainActivity : AppCompatActivity(), MusicUpdateObserver {
             }
         }
     }
+//    thread pour la mise a jour du seekbar
     private fun startSeekBarUpdate() {
         stopSeekBarUpdate()
         countDownTimer = object : CountDownTimer(Long.MAX_VALUE, 100) {
@@ -387,7 +317,6 @@ class MainActivity : AppCompatActivity(), MusicUpdateObserver {
                     currentTimeText.text = formatTime(it.currentPosition)
                 }
             }
-
             override fun onFinish() {}
         }.start()
     }
@@ -399,7 +328,7 @@ class MainActivity : AppCompatActivity(), MusicUpdateObserver {
         seekBar.progress = 0
         currentTimeText.text = "0:00"
 
-        updateUIForCurrentSong()
+        updateCurentSong()
         startSeekBarUpdate()
     }
     private fun formatTime(millis: Long): String {

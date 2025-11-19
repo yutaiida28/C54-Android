@@ -31,13 +31,13 @@
         android:id="@+id/playlistNameEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:drawable/edit_text"
+        android:background="@color/background_dark"
         android:hint="Enter playlist name"
         android:inputType="text"
         android:maxLines="1"
         android:padding="12dp"
-        android:textColor="@color/text_primary" />
-
+        android:textColor="@color/text_primary"
+        android:textColorHint="@color/text_primary" />
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

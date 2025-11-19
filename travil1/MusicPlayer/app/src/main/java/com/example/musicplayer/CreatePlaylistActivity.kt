@@ -28,7 +28,7 @@ class CreatePlaylistActivity : AppCompatActivity() {
         doneButton = findViewById(R.id.doneButton)
         cancelButton = findViewById(R.id.cancelButton)
 
-        // Check if music data is loaded
+        // verifie si la music a ete telecharger
         if (!musicManager.isDataLoaded) {
             Toast.makeText(this, "Please load music first", Toast.LENGTH_SHORT).show()
             finish()
@@ -40,7 +40,7 @@ class CreatePlaylistActivity : AppCompatActivity() {
         doneButton.setOnClickListener {
             createPlaylist()
         }
-
+        // anuule l'action de creation de music
         cancelButton.setOnClickListener {
             // Go back without creating playlist
             setResult(RESULT_CANCELED)
@@ -75,29 +75,29 @@ class CreatePlaylistActivity : AppCompatActivity() {
     private fun createPlaylist() {
         val playlistName = playlistNameEditText.text.toString().trim()
 
-        // Validate playlist name
+        // assure que l'utilisateur a mis un nom a la playliste
         if (playlistName.isEmpty()) {
             Toast.makeText(this, "Please enter a playlist name", Toast.LENGTH_SHORT).show()
             playlistNameEditText.error = "Name is required"
             return
         }
 
-        // Validate song selection
+        // assure quil y a aumoin une music de selectionner
         if (selectedMusicIndices.isEmpty()) {
             Toast.makeText(this, "Please select at least one song", Toast.LENGTH_SHORT).show()
             return
         }
 
-        // Create the playlist
+        // fait la playliste
         val playlist = Playlist(
             name = playlistName,
             musicIndices = selectedMusicIndices.sorted()
         )
 
-        // Add to manager
+        // ajoute la playliste dans le manager
         musicManager.addPlaylist(playlist)
 
-        // Create intent with result data
+        // fait un itent pour renvoiller
         val resultIntent = Intent()
         resultIntent.putExtra("playlistName", playlistName)
         resultIntent.putIntegerArrayListExtra("selectedIndices", ArrayList(selectedMusicIndices))
@@ -110,7 +110,7 @@ class CreatePlaylistActivity : AppCompatActivity() {
             Toast.LENGTH_LONG
         ).show()
 
-        // Return to MainActivity
+        // quite l'activite
         finish()
     }
 }

@@ -1,20 +1,22 @@
 package com.example.musicplayer
-
+//ceci est la class qui gere tout les element de l'app qui possede les musique est les playliste
 class MusicManager private constructor() {
-
+    // Ici on force que toute l'app se serve de listeMusics en lecture seule
+    // Seul MusicManager peut la modifier (setter privé)
     var listeMusics: ListeMusics = ListeMusics()
         private set
 
     var isDataLoaded: Boolean = false
         private set
 
-    // Store user playlists
+    //  une liste mutable qui est modifiable meme si elle est private
     private val playlists = mutableListOf<Playlist>()
-
+    //
     companion object {
+//      Volatile est ma solution du web qui assure que tous les threads voient immédiatement les changements sur instance
         @Volatile
         private var instance: MusicManager? = null
-
+//      la function pour pouvoir obtenir l'instance a l'exterieur de la class
         fun getInstance(): MusicManager {
             return instance ?: synchronized(this) {
                 instance ?: MusicManager().also { instance = it }
@@ -39,21 +41,13 @@ class MusicManager private constructor() {
         }
     }
 
-    fun getMusicCount(): Int {
-        return listeMusics.listeMusic.size
-    }
-
-    // Playlist management
+    // pour ajouter une playliste
     fun addPlaylist(playlist: Playlist) {
         playlists.add(playlist)
     }
 
     fun getPlaylists(): List<Playlist> {
         return playlists.toList()
-    }
-
-    fun getPlaylist(index: Int): Playlist? {
-        return if (index in playlists.indices) playlists[index] else null
     }
 
     fun getMusicFromPlaylist(playlist: Playlist): List<Music> {
