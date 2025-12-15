@@ -1,0 +1,57 @@
+C ANDROID
+Revision 
+Matiere exam 
+----kotlin----
+Lire Ecrire du text dans fichier de serialisation
+⦁	Annexe : 3 memo, 4 utilisateur 
+Diffuser de la music avec Exo player 
+⦁	 Atelier 2 (implementation)
+Animation avec ObjectAnimator
+⦁	 Annexe 8,8b
+Explique le patron de conception Observer 
+⦁	 Atelier musicplayertp1, travil1 MusicPlayer 
+communiquer avec un fichier JSON a un serveur avec Volley et Klaxon
+⦁	 Volley  atelier\atelier1|1b
+⦁	 klaxon  atelier\atelier1b, Atelier musicplayertp1
+Coder un classe Kotlin connaitre les atouts que la nullabilité soit possible sans lancement d'exceptions 
+⦁	Operateur elvis ou annexe 4
+
+
+
+
+React 
+Coder une composante et utiliser ceux déjà faits (moi / importe) 
+Créer annexe 1
+Import 
+Utiliser un component installer  (how to too )
+Hook useState useEffect
+Expo-location et react-native-maps….
+----ux----ui----
+expliquer les points importants de l'utilisabilité et du UX Design et la différence entre les deux 
+voir fichier 
+
+
+
+
+
+data class Utilisateur(
+    val nom: String,
+    var email: String? // 'email' peut être null
+)
+fun afficherEmail(utilisateur: Utilisateur) {
+    // Utilisation de l'opérateur Elvis (?:) pour fournir une valeur par défaut
+    val emailAffiche = utilisateur.email ?: "Email non fourni"
+    println("L'email de ${utilisateur.nom} est : $emailAffiche")
+    // Utilisation de l'opérateur de chaînage sécurisé (?.)
+    // Si 'utilisateur.email' est null, la partie droite de l'opérateur ne sera pas exécutée
+    utilisateur.email?.let { emailNonNull ->
+        println("Email sécurisé : $emailNonNull")
+    }
+    // Ou simplement pour un appel conditionnel :
+    // utilisateur.email?.uppercase() // Retourne null si email est null
+}
+fun main() {
+    val user1 = Utilisateur("Alice", "alice@example.com")
+    val user2 = Utilisateur("Bob", null) // Bob n'a pas d'email
+    afficherEmail(user1) // Affiche l'email réel
+    afficherEmail(user2) // Affiche "Email non fourni" grâce à ?:
